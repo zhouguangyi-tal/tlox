@@ -1,0 +1,23 @@
+{
+  "name": "tlox",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "test": "ts-node src/tlox.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhouguangyi-tal/tlox.git"
+  },
+  "author": "zgy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhouguangyi-tal/tlox/issues"
+  },
+  "homepage": "https://github.com/zhouguangyi-tal/tlox#readme",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
