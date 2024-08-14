@@ -1,6 +1,7 @@
 import readline from "readline";
 import fs from "fs";
 import path from "path";
+import { Scanner } from "./scanner";
 
 function runPrompt() {
   const rl = readline.createInterface({
@@ -28,6 +29,12 @@ function main() {
   runFile("index.txt");
 }
 
-function run(source: string) {}
+function run(source: string) {
+  const scanner = new Scanner(source);
+  const tokens = scanner.scanTokens();
+  tokens.forEach((item) => {
+    console.log(item);
+  });
+}
 
 main();
