@@ -2,6 +2,7 @@ import readline from "readline";
 import fs from "fs";
 import path from "path";
 import { Scanner } from "./scanner";
+import {Parser} from "./parser";
 
 function runPrompt() {
   const rl = readline.createInterface({
@@ -26,15 +27,17 @@ function runFile(fileName: string) {
 }
 
 function main() {
-  runFile("index.txt");
+  runFile("binary.txt");
 }
 
 function run(source: string) {
   const scanner = new Scanner(source);
   const tokens = scanner.scanTokens();
-  tokens.forEach((item) => {
+  const parser = new Parser(tokens)
+ /* tokens.forEach((item) => {
     console.log(item);
-  });
+  });*/
+
 }
 
 main();
