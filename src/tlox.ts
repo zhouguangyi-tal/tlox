@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { Scanner } from "./scanner";
 import {Parser} from "./parser";
+import {Interpreter} from "./interpreter";
 
 function runPrompt() {
   const rl = readline.createInterface({
@@ -34,6 +35,9 @@ function run(source: string) {
   const scanner = new Scanner(source);
   const tokens = scanner.scanTokens();
   const parser = new Parser(tokens)
+  const expression = parser.expression()
+  const interpreter = new Interpreter()
+  interpreter.interpret(expression)
  /* tokens.forEach((item) => {
     console.log(item);
   });*/

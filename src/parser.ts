@@ -7,8 +7,10 @@ export class Parser {
 
     constructor(readonly tokens: Token[]) {
         console.log(this.tokens)
-        let res = this.expression()
-        console.log(res)
+    }
+
+    parse(){
+        const statements: Stmt[] = [];
     }
 
     expression(): Expr {
@@ -114,7 +116,6 @@ export class Parser {
         if (!this.isAtEnd()) this.current++;
         return this.previous()
     }
-
     isAtEnd() {
         return this.peek().type == TokenType.EOF
     }
