@@ -35,9 +35,10 @@ function run(source: string) {
   const scanner = new Scanner(source);
   const tokens = scanner.scanTokens();
   const parser = new Parser(tokens)
-  const expression = parser.expression()
+  // console.log('zzz',tokens);
+  const statements = parser.parse()
   const interpreter = new Interpreter()
-  interpreter.interpret(expression)
+  interpreter.interpret(statements)
  /* tokens.forEach((item) => {
     console.log(item);
   });*/

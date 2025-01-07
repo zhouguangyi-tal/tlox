@@ -1,8 +1,12 @@
-import {Expr, ExprVisitor} from "./ats";
+import {Callable, Expr, ExprVisitor, Stmt, StmtVisitor, Variable} from "./ats";
 import {Token, TokenType} from "./scanner";
+import * as console from "node:console";
+import {Environment} from "./environment";
 
 
-export class Interpreter implements ExprVisitor<Value>{
+export class Interpreter implements ExprVisitor<Value>,StmtVisitor<void> {
+    readonly globals = new Environment();
+    private environment = this.globals;
     visitLiteral(value: string | number | boolean | null): Value {//访问字面量
         return value;
     }
@@ -69,6 +73,8 @@ export class Interpreter implements ExprVisitor<Value>{
     }
 
     visitAssign(name: Token, value: Expr): Value {
+        const result = this.evaluate(value);
+        this.environment.assign(name, result);
         return undefined;
     }
 
@@ -101,7 +107,7 @@ export class Interpreter implements ExprVisitor<Value>{
     }
 
     visitVariable(name: Token): Value {
-        return undefined;
+        return this.environment.get(name);
     }
 
     private checkNumberOperand(operator: Token, operands: Record<string, Value>){
@@ -118,13 +124,17 @@ export class Interpreter implements ExprVisitor<Value>{
         );
         
     }
-    interpret(expression: Expr): Value {
-        try{
-            const value=  this.evaluate(expression);
-            console.log('value',value)
-            return value;
-        }catch (e){
-            throw e
+    interpret(statements: Stmt[]) {
+        try {
+            for (const statement of statements) {
+                this.execute(statement);
+            }
+        } catch (e) {
+            if (e instanceof RuntimeError) {
+                //
+                return;
+            }
+            throw e;
         }
     }
     stringify(value: Value) {
@@ -133,6 +143,48 @@ export class Interpreter implements ExprVisitor<Value>{
     }
     evaluate(expression: Expr) {
         return expression.accept(this);
+    }
+    execute(statement: Stmt) {
+        statement.accept(this);
+    }
+
+    visitBlock(statements: Stmt[]): void {
+        return undefined;
+    }
+
+    visitCallable(name: Token, params: Token[], body: Stmt[]): void {
+        return undefined;
+    }
+
+    visitClass(name: Token, superclass: Variable | undefined, methods: Callable[]): void {
+        return undefined;
+    }
+
+    visitExpression(expression: Expr): void {
+        return undefined;
+    }
+
+    visitIf(condition: Expr, onTrue: Stmt, onFalse: Stmt | undefined): void {
+        return undefined;
+    }
+
+    visitPrint(expression: Expr): void {
+        console.log(this.evaluate(expression)?.toString() || "nil");
+    }
+
+    visitReturn(keyword: Token, value: Expr | undefined): void {
+        return undefined;
+    }
+
+    visitVar(name: Token, initializer: Expr | undefined): void {
+        this.environment.define(
+            name.lexeme,
+            initializer ? this.evaluate(initializer) : null,
+        );
+    }
+
+    visitWhile(condition: Expr, body: Stmt): void {
+        return undefined;
     }
 }
 

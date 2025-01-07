@@ -161,6 +161,246 @@ export class Grouping implements Expr {
     }
 }
 
+export class Variable implements Expr {
+    constructor(
+        readonly name: Token,
+    ) {}
+    accept<R>(visitor: ExprVisitor<R>): R {
+        return visitor.visitVariable(
+            this.name,
+        );
+    }
+    toString() {
+        const body = [
+            "Variable",
+            this.name?.toString(),
+        ].filter((it) => it).join(" ");
+        return "(" + body + ")";
+    }
+}
+
+export interface StmtVisitor<R> {
+    visitBlock(
+        statements: Stmt[],
+    ): R;
+    visitCallable(
+        name: Token,
+        params: Token[],
+        body: Stmt[],
+    ): R;
+    visitClass(
+        name: Token,
+        superclass: Variable | undefined,
+        methods: Callable[],
+    ): R;
+    visitExpression(
+        expression: Expr,
+    ): R;
+    visitIf(
+        condition: Expr,
+        onTrue: Stmt,
+        onFalse: Stmt | undefined,
+    ): R;
+    visitPrint(
+        expression: Expr,
+    ): R;
+    visitReturn(
+        keyword: Token,
+        value: Expr | undefined,
+    ): R;
+    visitVar(
+        name: Token,
+        initializer: Expr | undefined,
+    ): R;
+    visitWhile(
+        condition: Expr,
+        body: Stmt,
+    ): R;
+}
+export interface Stmt {
+    accept<R>(visitor: StmtVisitor<R>): R;
+}
+export class Block implements Stmt {
+    constructor(
+        readonly statements: Stmt[],
+    ) {}
+    accept<R>(visitor: StmtVisitor<R>): R {
+        return visitor.visitBlock(
+            this.statements,
+        );
+    }
+    toString() {
+        const body = [
+            "Block",
+            this.statements?.toString(),
+        ].filter((it) => it).join(" ");
+        return "(" + body + ")";
+    }
+}
+export class Callable implements Stmt {
+    constructor(
+        readonly name: Token,
+        readonly params: Token[],
+        readonly body: Stmt[],
+    ) {}
+    accept<R>(visitor: StmtVisitor<R>): R {
+        return visitor.visitCallable(
+            this.name,
+            this.params,
+            this.body,
+        );
+    }
+    toString() {
+        const body = [
+            "Callable",
+            this.name?.toString(),
+            this.params?.toString(),
+            this.body?.toString(),
+        ].filter((it) => it).join(" ");
+        return "(" + body + ")";
+    }
+}
+export class Class implements Stmt {
+    constructor(
+        readonly name: Token,
+        readonly superclass: Variable | undefined,
+        readonly methods: Callable[],
+    ) {}
+    accept<R>(visitor: StmtVisitor<R>): R {
+        return visitor.visitClass(
+            this.name,
+            this.superclass,
+            this.methods,
+        );
+    }
+    toString() {
+        const body = [
+            "Class",
+            this.name?.toString(),
+            this.superclass?.toString(),
+            this.methods?.toString(),
+        ].filter((it) => it).join(" ");
+        return "(" + body + ")";
+    }
+}
+export class Expression implements Stmt {
+    constructor(
+        readonly expression: Expr,
+    ) {}
+    accept<R>(visitor: StmtVisitor<R>): R {
+        return visitor.visitExpression(
+            this.expression,
+        );
+    }
+    toString() {
+        const body = [
+            "Expression",
+            this.expression?.toString(),
+        ].filter((it) => it).join(" ");
+        return "(" + body + ")";
+    }
+}
+export class If implements Stmt {
+    constructor(
+        readonly condition: Expr,
+        readonly onTrue: Stmt,
+        readonly onFalse: Stmt | undefined,
+    ) {}
+    accept<R>(visitor: StmtVisitor<R>): R {
+        return visitor.visitIf(
+            this.condition,
+            this.onTrue,
+            this.onFalse,
+        );
+    }
+    toString() {
+        const body = [
+            "If",
+            this.condition?.toString(),
+            this.onTrue?.toString(),
+            this.onFalse?.toString(),
+        ].filter((it) => it).join(" ");
+        return "(" + body + ")";
+    }
+}
+export class Print implements Stmt {
+    constructor(
+        readonly expression: Expr,
+    ) {}
+    accept<R>(visitor: StmtVisitor<R>): R {
+        return visitor.visitPrint(
+            this.expression,
+        );
+    }
+    toString() {
+        const body = [
+            "Print",
+            this.expression?.toString(),
+        ].filter((it) => it).join(" ");
+        return "(" + body + ")";
+    }
+}
+export class Return implements Stmt {
+    constructor(
+        readonly keyword: Token,
+        readonly value: Expr | undefined,
+    ) {}
+    accept<R>(visitor: StmtVisitor<R>): R {
+        return visitor.visitReturn(
+            this.keyword,
+            this.value,
+        );
+    }
+    toString() {
+        const body = [
+            "Return",
+            this.keyword?.toString(),
+            this.value?.toString(),
+        ].filter((it) => it).join(" ");
+        return "(" + body + ")";
+    }
+}
+export class Var implements Stmt {
+    constructor(
+        readonly name: Token,
+        readonly initializer: Expr | undefined,
+    ) {}
+    accept<R>(visitor: StmtVisitor<R>): R {
+        return visitor.visitVar(
+            this.name,
+            this.initializer,
+        );
+    }
+    toString() {
+        const body = [
+            "Var",
+            this.name?.toString(),
+            this.initializer?.toString(),
+        ].filter((it) => it).join(" ");
+        return "(" + body + ")";
+    }
+}
+export class While implements Stmt {
+    constructor(
+        readonly condition: Expr,
+        readonly body: Stmt,
+    ) {}
+    accept<R>(visitor: StmtVisitor<R>): R {
+        return visitor.visitWhile(
+            this.condition,
+            this.body,
+        );
+    }
+    toString() {
+        const body = [
+            "While",
+            this.condition?.toString(),
+            this.body?.toString(),
+        ].filter((it) => it).join(" ");
+        return "(" + body + ")";
+    }
+}
+
 
 
 
