@@ -1,6 +1,5 @@
 import {Callable, Expr, ExprVisitor, Stmt, StmtVisitor, Variable} from "./ats";
 import {Token, TokenType} from "./scanner";
-import * as console from "node:console";
 import {Environment} from "./environment";
 
 

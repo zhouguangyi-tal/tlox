@@ -1,2 +1,0 @@
-var a = 90;
-print a+1; // "hi".

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "test": "ts-node src/tlox.ts"
+   "dev": "vite"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,8 @@
   "devDependencies": {
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "vite": "^6.0.7"
   }
 }
