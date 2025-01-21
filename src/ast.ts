@@ -220,6 +220,8 @@ export interface StmtVisitor<R> {
 export interface Stmt {
     accept<R>(visitor: StmtVisitor<R>): R;
 }
+
+
 export class Block implements Stmt {
     constructor(
         readonly statements: Stmt[],

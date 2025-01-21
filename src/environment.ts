@@ -3,7 +3,11 @@ import {Token} from "./scanner";
 
 export class Environment {
     readonly values = new Map<string, Value>();
-    constructor(readonly enclosing: Environment | null = null) {}
+    enclosing?: Environment;
+    constructor(enclosing?: Environment) {
+        this.enclosing = enclosing;
+    }
+
     define(key: string, value: Value) {
         this.values.set(key, value);
     }
@@ -11,15 +15,23 @@ export class Environment {
         if(this.values.has(name.lexeme)){
             return this.values.get(name.lexeme) as Value;
         }
+        if (this.enclosing) {
+            return this.enclosing.get(name);
+        }
+
         throw new RuntimeError(name,"Undefined variable '" + name.lexeme + "'.")
     }
     assign(name: Token, value: Value) {
         if (this.values.has(name.lexeme)) {
-            return this.values.set(name.lexeme, value);
+            this.values.set(name.lexeme, value);
+            return;
         }
-        if (this.enclosing === null) {
-            throw new RuntimeError(name, `Undefined variable ${name.lexeme}.`);
+
+        if (this.enclosing) {
+            this.enclosing.assign(name, value);
+            return;
         }
-        this.enclosing.assign(name, value);
+
+        throw new RuntimeError(name, `Undefined variable ${name.lexeme}.`);
     }
 }

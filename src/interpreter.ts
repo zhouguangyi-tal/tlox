@@ -1,4 +1,4 @@
-import {Callable, Expr, ExprVisitor, Stmt, StmtVisitor, Variable} from "./ats";
+import {Callable, Expr, ExprVisitor, Stmt, StmtVisitor, Variable} from "./ast";
 import {Token, TokenType} from "./scanner";
 import {Environment} from "./environment";
 
@@ -146,9 +146,20 @@ export class Interpreter implements ExprVisitor<Value>,StmtVisitor<void> {
     execute(statement: Stmt) {
         statement.accept(this);
     }
+    executeBlock(statements: Stmt[], environment: Environment) {
+        const previous = this.environment
+        try {
+            this.environment = environment;
+            for (const stmt of statements) {
+                stmt&&this.execute(stmt);
+            }
+        } finally {
+            this.environment = previous;
+        }
+    }
 
     visitBlock(statements: Stmt[]): void {
-        return undefined;
+        this.executeBlock(statements, new Environment(this.environment));
     }
 
     visitCallable(name: Token, params: Token[], body: Stmt[]): void {
@@ -181,6 +192,7 @@ export class Interpreter implements ExprVisitor<Value>,StmtVisitor<void> {
             initializer ? this.evaluate(initializer) : null,
         );
     }
+
 
     visitWhile(condition: Expr, body: Stmt): void {
         return undefined;

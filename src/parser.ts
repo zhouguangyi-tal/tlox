@@ -1,5 +1,5 @@
 import {Token, TokenType} from "./scanner";
-import {Assign, Binary, Expr, Expression, Grouping, Literal, Print, Stmt, Unary, Var, Variable} from "./ats";
+import {Assign, Binary, Block, Expr, Expression, Grouping, Literal, Print, Stmt, Unary, Var, Variable} from "./ast";
 
 //解析器
 export class Parser {
@@ -12,7 +12,7 @@ export class Parser {
     parse(){
         const statements: Stmt[] = [];
         while (!this.isAtEnd()) {
-            statements.push(this.declaration())
+            statements.push(this.declaration());
         }
         return statements;
     }
@@ -51,6 +51,8 @@ export class Parser {
     statement() {
         if(this.match(TokenType.PRINT))
             return this.printStatement();
+        if (this.match(TokenType.LEFT_BRACE))
+            return new Block(this.block());
         return this.expressionStatement();
     }
     printStatement() {
@@ -68,7 +70,14 @@ export class Parser {
         // console.log("zzz var", new Var(name, initializer),initializer)
         return new Var(name, initializer);
     }
-
+    block() {
+        const statements = new Array<Stmt>();
+        while (!this.check(TokenType.RIGHT_BRACE) && !this.isAtEnd()) {
+            statements.push(this.declaration() as Stmt);
+        }
+        this.consume(TokenType.RIGHT_BRACE, "Expect '}' after block.")
+        return statements
+    }
     expressionStatement() {
         const expr = this.expression();
         this.consume(TokenType.SEMICOLON, "Expect ';' after expression");
