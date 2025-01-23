@@ -10,24 +10,12 @@
   <h1>Hello TLox!</h1>
   <textarea id="sourceCode" style="display: block; width: 500px; height: 600px;">
     var a = "global a";
-var b = "global b";
-var c = "global c";
-{
-  var a = "outer a";
-  var b = "outer b";
-  {
-    var a = "inner a";
-    print a;
-    print b;
-    print c;
-  }
-  print a;
-  print b;
-  print c;
-}
-print a;
-print b;
-print c;
+    if(true) {
+      var a = "local a";
+      print a;
+    }else {
+      print a;
+    }
   </textarea>
     <button id="runButton">Run</button>
   <script type="module" src="/src/tlox.ts"></script>

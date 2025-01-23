@@ -179,6 +179,28 @@ export class Variable implements Expr {
     }
 }
 
+export class Logical implements Expr {
+
+    left: Expr;
+    operator: Token;
+    right: Expr;
+
+    constructor(left: Expr, operator: Token, right: Expr) {
+
+        this.left = left;
+        this.operator = operator;
+        this.right = right;
+
+    }
+
+    accept<R>(visitor: ExprVisitor<R>): R {
+
+        return visitor.visitLogical(this.left, this.operator, this.right);
+
+    }
+
+}
+
 export interface StmtVisitor<R> {
     visitBlock(
         statements: Stmt[],

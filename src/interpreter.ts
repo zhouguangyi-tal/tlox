@@ -90,7 +90,17 @@ export class Interpreter implements ExprVisitor<Value>,StmtVisitor<void> {
 
 
     visitLogical(left: Expr, operator: Token, right: Expr): Value {
-        return undefined;
+        const leftVlue = this.evaluate(left);
+
+        if (operator.type === TokenType.OR) {
+            if (leftVlue)
+                return leftVlue;
+        } else {
+            if (!left)
+                return leftVlue;
+        }
+
+        return this.evaluate(right);
     }
 
     visitSet(object: Expr, name: Token, value: Expr): Value {
@@ -175,7 +185,11 @@ export class Interpreter implements ExprVisitor<Value>,StmtVisitor<void> {
     }
 
     visitIf(condition: Expr, onTrue: Stmt, onFalse: Stmt | undefined): void {
-        return undefined;
+        if (this.evaluate(condition)) {
+            this.execute(onTrue);
+        } else if (onFalse) {
+            this.execute(onFalse);
+        }
     }
 
     visitPrint(expression: Expr): void {
