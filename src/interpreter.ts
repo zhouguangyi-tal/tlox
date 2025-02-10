@@ -209,6 +209,10 @@ export class Interpreter implements ExprVisitor<Value>,StmtVisitor<void> {
 
 
     visitWhile(condition: Expr, body: Stmt): void {
+
+        while (this.evaluate(condition)) {
+            this.execute(body);
+        }
         return undefined;
     }
 }

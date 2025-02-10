@@ -1,5 +1,5 @@
 import {Token, TokenType} from "./scanner";
-import {Assign, Binary, Block, Expr, Expression, Grouping, If, Literal, Logical, Print, Stmt, Unary, Var, Variable} from "./ast";
+import {Assign, Binary, Block, Expr, Expression, Grouping, If, Literal, Logical, Print, Stmt, Unary, Var, Variable, While} from "./ast";
 
 //解析器
 export class Parser {
@@ -53,6 +53,8 @@ export class Parser {
             return this.ifStatement();
         if(this.match(TokenType.PRINT))
             return this.printStatement();
+        if (this.match(TokenType.WHILE))
+            return this.whileStatement();
         if (this.match(TokenType.LEFT_BRACE))
             return new Block(this.block());
         return this.expressionStatement();
@@ -84,6 +86,13 @@ export class Parser {
         this.consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.");
         // console.log("zzz var", new Var(name, initializer),initializer)
         return new Var(name, initializer);
+    }
+    private whileStatement() {
+        this.consume(TokenType.LEFT_PAREN, "Expect '(' after 'while'.");
+        const condition = this.expression();
+        this.consume(TokenType.RIGHT_PAREN, "Expect ')' after condition.");
+        const body = this.statement();
+        return new While(condition,body)
     }
     block() {
         const statements = new Array<Stmt>();

@@ -1,5 +1,17 @@
 link "/index.x"
 
++ - * /  ^ 数学运算 
+& | ~    位运算
+! && ||  逻辑运算
+
+Int cc =21;
+^Int ptr = 0x99199233
+ptr = @cc
+
+Int b = ^ptr
+
+
+
 //全局变量
 
 Int age = 99;
@@ -8,6 +20,20 @@ String str = "hello world";
 arr[1];
 (int,string) tup =(1,"hello) //元组
 tup(0)
+tup(1)
+
+
+type Stu =  class {
+    Int num1;
+    Int n2;
+}
+type Tea = struct{
+    string name;
+    void say(){
+
+    }
+}
+
 
 //函数类型
 string(Int,string)  funcPlay = (a,b){
@@ -73,4 +99,28 @@ void main(){
 
 
 
+}
+
+class P{
+    static string name;
+    Int age;
+}
+
+clsss M{
+    Int age;
+}
+
+class C :: P,M{
+    Int age;
+    void say(){
+        print(P..age)
+    }
+}
+class S :: C,P{
+
+    void say(){
+        C..P..age
+        C..age
+        this.age //就近原则
+    }
 }
