@@ -74,7 +74,7 @@ export class Interpreter implements ExprVisitor<Value>,StmtVisitor<void> {
     visitAssign(name: Token, value: Expr): Value {
         const result = this.evaluate(value);
         this.environment.assign(name, result);
-        return undefined;
+        return result;
     }
 
 
@@ -181,7 +181,7 @@ export class Interpreter implements ExprVisitor<Value>,StmtVisitor<void> {
     }
 
     visitExpression(expression: Expr): void {
-        return undefined;
+        this.evaluate(expression);;
     }
 
     visitIf(condition: Expr, onTrue: Stmt, onFalse: Stmt | undefined): void {
@@ -210,7 +210,7 @@ export class Interpreter implements ExprVisitor<Value>,StmtVisitor<void> {
 
     visitWhile(condition: Expr, body: Stmt): void {
 
-        while (this.evaluate(condition)) {
+        while (!!this.evaluate(condition)) {
             this.execute(body);
         }
         return undefined;
